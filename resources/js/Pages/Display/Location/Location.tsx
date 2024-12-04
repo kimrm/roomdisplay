@@ -41,18 +41,18 @@ function ListItem({ booking, index }: { booking: IBooking; index: number }) {
                     index % 2 === 0 ? "bg-slate-900" : "bg-slate-800"
                 } rounded-l-lg p-6 font-bold text-slate-200`}
             >
-                {booking.id} {booking.name}
+                {booking.name}
             </div>
             {new Date(booking.start).getHours() === 0 &&
             new Date(booking.end).getHours() === 0 ? (
                 <div
-                    className={`${index % 2 === 0 ? "bg-slate-900" : "bg-slate-800"} p-6`}
+                    className={`${index % 2 === 0 ? "bg-slate-900" : "bg-slate-800"} p-6 font-mono`}
                 >
                     Hele dagen
                 </div>
             ) : (
                 <div
-                    className={`${index % 2 === 0 ? "bg-slate-900" : "bg-slate-800"} p-6`}
+                    className={`${index % 2 === 0 ? "bg-slate-900" : "bg-slate-800"} p-6 font-mono`}
                 >
                     {new Date(booking.start).toLocaleTimeString([], {
                         hour: "2-digit",
@@ -112,7 +112,7 @@ export default function Location({ location }: ILocationProps) {
             <div id="content" className="h-screen bg-black p-10 text-white">
                 <div className="mb-5 flex justify-between">
                     <h1 className="text-4xl font-extrabold">
-                        {import.meta.env.VITE_VENUE_NAME} {location.data.name}
+                        {import.meta.env.VITE_VENUE_NAME} - {location.data.name}
                     </h1>
                     <Clock className="rounded bg-slate-50 p-4 text-4xl text-slate-950" />
                 </div>
