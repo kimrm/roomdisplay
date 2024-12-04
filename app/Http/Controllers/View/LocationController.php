@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\View;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\LocationResource;
 use Illuminate\Http\Request;
+use App\Models\Location;
 
 class LocationController extends Controller
 {
@@ -34,14 +36,10 @@ class LocationController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Location $location)
     {
-
         return inertia('Display/Location/Location', [
-            'location' => [
-                'id' => $id,
-                'name' => 'Location ' . $id,
-            ],
+            'location' => new LocationResource($location),
         ]);
     }
 
