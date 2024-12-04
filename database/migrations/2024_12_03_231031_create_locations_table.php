@@ -13,6 +13,9 @@ return new class extends Migration
     {
         Schema::create('locations', function (Blueprint $table) {
             $table->id();
+            $table->string('slug')->unique();
+            $table->text('description')->nullable();
+            $table->text('display_message')->nullable();
             $table->timestamps();
         });
     }
