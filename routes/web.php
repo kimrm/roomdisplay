@@ -15,12 +15,8 @@ Route::get('/', function () {
     ]);
 });
 
-Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
-
 Route::prefix('/locations')->group(function () {
-    Route::get('/{location}', [LocationController::class, 'show'])->name('locations.show');
+    Route::get('/{location:slug}', [LocationController::class, 'show'])->name('locations.show');
 });
 
 Route::middleware('auth')->group(function () {
@@ -29,4 +25,5 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+require __DIR__ . '/dashboard.php';
 require __DIR__ . '/auth.php';
