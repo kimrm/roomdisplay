@@ -9,3 +9,9 @@ A digital signage solution for displaying meeting rooms availability status on s
 - Laravel
 - React
 - Inertia.js
+
+### Tools
+
+- Playwright end-to-end testing
+- Docker
+- TailwindCSS
