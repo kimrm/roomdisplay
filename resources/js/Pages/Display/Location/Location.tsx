@@ -117,17 +117,15 @@ export default function Location({ location }: ILocationProps) {
                     <Clock className="rounded bg-slate-50 p-4 text-4xl text-slate-950" />
                 </div>
                 {bookings && (
-                    <div>
-                        <ul>
-                            {bookings.map((booking, index) => (
-                                <ListItem
-                                    key={booking.id}
-                                    booking={booking}
-                                    index={index}
-                                />
-                            ))}
-                        </ul>
-                    </div>
+                    <ul id="bookings">
+                        {bookings.map((booking, index) => (
+                            <ListItem
+                                key={booking.id}
+                                booking={booking}
+                                index={index}
+                            />
+                        ))}
+                    </ul>
                 )}
             </div>
         </LocationLayout>
