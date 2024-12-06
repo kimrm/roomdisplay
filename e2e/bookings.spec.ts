@@ -1,5 +1,5 @@
 import { expect, test } from "@playwright/test";
-import { appName, baseUrl } from "./env";
+import { baseUrl, venueName } from "./env";
 
 test("show bookings page", async ({ page }) => {
     const locationSlug = "test-location";
@@ -8,5 +8,5 @@ test("show bookings page", async ({ page }) => {
 
     const heading = page.locator("h1");
 
-    await expect(heading).toHaveText(`${appName} - ${locationName}`);
+    await expect(heading).toHaveText(`${venueName} - ${locationName}`);
 });
