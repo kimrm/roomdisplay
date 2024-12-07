@@ -15,6 +15,10 @@ class BookingsSeeder extends Seeder
      */
     public function run(): void
     {
+        Booking::query()->delete();
+        Room::query()->delete();
+        Location::query()->delete();
+
         $location = Location::factory()->create([
             'name' => 'Test Location',
             'slug' => 'test-location',
@@ -34,26 +38,17 @@ class BookingsSeeder extends Seeder
             'name' => 'Test Room 3',
             'slug' => 'test-room-3',
         ]);
-        $startFrom = now();
-        Booking::factory()->create([
-            'room_id' => $room1->id,
-            'start' => $startFrom,
-            'end' => $startFrom->addHour(),
-            'name' => 'Test Booking 1',
-        ]);
-        $startFrom = $startFrom->addHour();
-        Booking::factory()->create([
-            'room_id' => $room2->id,
-            'start' => $startFrom,
-            'end' => $startFrom->addHour(),
-            'name' => 'Test Booking 2',
-        ]);
-        $startFrom = $startFrom->addHour();
-        Booking::factory()->create([
-            'room_id' => $room3->id,
-            'start' => $startFrom,
-            'end' => $startFrom->addHour(),
-            'name' => 'Test Booking 3',
-        ]);
+        $startFrom = now()->startOfDay();
+        $endIn = $startFrom->copy()->addHour();
+        for ($i = 0; $i < 20; $i++) {
+            Booking::factory()->create([
+                'room_id' => $room1->id,
+                'start' => $startFrom,
+                'end' => $endIn,
+                'name' => 'Test Booking 1',
+            ]);
+            $startFrom = $startFrom->addHour();
+            $endIn = $startFrom->copy()->addHour();
+        }
     }
 }
