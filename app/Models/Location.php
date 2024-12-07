@@ -16,6 +16,13 @@ class Location extends Model
         return $this->hasMany(Room::class);
     }
 
+    public function bookingsToDay(): HasManyThrough
+    {
+        return $this->hasManyThrough(Booking::class, Room::class)
+            ->where('start', '>=', now()->startOfDay())
+            ->where('end', '<=', now()->endOfDay());
+    }
+
     public function bookings(): HasManyThrough
     {
         return $this->hasManyThrough(Booking::class, Room::class);
