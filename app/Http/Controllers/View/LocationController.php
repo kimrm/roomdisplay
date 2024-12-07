@@ -38,8 +38,8 @@ class LocationController extends Controller
      */
     public function show(Location $location)
     {
-        return inertia('Display/Location/Location', [
-            'location' => new LocationResource($location->load('bookings.room')),
+        return inertia('Display/Location/LocationPage', [
+            'location' => new LocationResource($location->load('bookingsToDay.room')),
         ]);
     }
 
