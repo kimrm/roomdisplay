@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Location;
 use App\Http\Resources\LocationResource;
 
-class LokationDayOverviewController extends Controller
+class LocationDayOverviewController extends Controller
 {
     /**
      * Display the specified resource.

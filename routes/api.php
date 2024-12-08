@@ -7,4 +7,4 @@ Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
 
-Route::get('/locations/{id}', 'App\Http\Controllers\Api\LokationDayOverviewController@show');
+Route::get('/locations/{id}', 'App\Http\Controllers\Api\LocationDayOverviewController@show');
