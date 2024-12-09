@@ -42,7 +42,7 @@ jobs:
         run: composer install --prefer-dist --no-progress --no-suggest
 
       - name: Set Laravel environment variables
-        run: cp .env.example .env
+        run: cp .env.test .env
 
       - name: Generate application key
         run: php artisan key:generate
