@@ -47,18 +47,18 @@ jobs:
       - name: Generate application key
         run: php artisan key:generate
 
-      - name: Run database migrations
-        run: php artisan migrate --force
+      - name: Create testing database
+        run: |
+          mysql -u root -ppassword -e "CREATE DATABASE IF NOT EXISTS testing;"
         env:
           DB_CONNECTION: mysql
           DB_HOST: 127.0.0.1
           DB_PORT: 3306
-          DB_DATABASE: roomdisplay
           DB_USERNAME: root
           DB_PASSWORD: password
 
-      - name: Run data migrations for testing
-        run: php artisan migrate --database=testing --force
+      - name: Run database migrations
+        run: php artisan migrate --force
         env:
           DB_CONNECTION: mysql
           DB_HOST: 127.0.0.1
