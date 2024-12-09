@@ -1,4 +1,4 @@
-name: Playwright Tests
+name: Tests
 on:
   push:
     branches: [main, master]
@@ -42,7 +42,7 @@ jobs:
         run: composer install --prefer-dist --no-progress --no-suggest
 
       - name: Set Laravel environment variables
-        run: cp .env.example .env
+        run: cp .env.test .env
 
       - name: Generate application key
         run: php artisan key:generate
@@ -53,11 +53,11 @@ jobs:
           DB_CONNECTION: mysql
           DB_HOST: 127.0.0.1
           DB_PORT: 3306
-          DB_DATABASE: roomdisplay
+          DB_DATABASE: testing
           DB_USERNAME: root
           DB_PASSWORD: password
 
-      - name: Seed the database
+      - name: Seed the database with test data for e2e
         run: php artisan db:seed --force
 
       - name: Build assets
@@ -70,6 +70,7 @@ jobs:
 
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps
+
       - name: Run Playwright tests
         run: npx playwright test
       - uses: actions/upload-artifact@v4
@@ -78,3 +79,6 @@ jobs:
           name: playwright-report
           path: playwright-report/
           retention-days: 30
+
+      - name: Run PHP tests
+        run: php artisan test
