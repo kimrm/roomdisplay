@@ -67,9 +67,6 @@ jobs:
           DB_USERNAME: root
           DB_PASSWORD: password
 
-      - name: Run PHP tests
-        run: php artisan test
-
       - name: Seed the database with test data for e2e
         run: php artisan db:seed --force
 
@@ -80,6 +77,9 @@ jobs:
         run: php artisan serve --host=0.0.0.0 --port=8000 &
         env:
           APP_ENV: testing
+
+      - name: Run PHP tests
+        run: php artisan test
 
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps
