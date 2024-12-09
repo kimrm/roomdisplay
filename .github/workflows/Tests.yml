@@ -57,8 +57,8 @@ jobs:
           DB_USERNAME: root
           DB_PASSWORD: password
 
-      - name: Run PHP tests
-        run: php artisan test
+      - name: Run data migrations for testing
+        run: php artisan migrate --database=testing --force
         env:
           DB_CONNECTION: mysql
           DB_HOST: 127.0.0.1
@@ -66,6 +66,9 @@ jobs:
           DB_DATABASE: testing
           DB_USERNAME: root
           DB_PASSWORD: password
+
+      - name: Run PHP tests
+        run: php artisan test
 
       - name: Seed the database with test data for e2e
         run: php artisan db:seed --force
