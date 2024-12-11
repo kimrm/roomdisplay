@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\View;
 
 use App\Http\Controllers\Controller;
+use App\Models\Location;
 use App\Models\Room;
 use Illuminate\Http\Request;
 
@@ -35,9 +36,9 @@ class RoomController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Room $room)
+    public function show(Location $location, Room $room)
     {
-        //
+        dd($room->name);
     }
 
     /**
