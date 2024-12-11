@@ -5,6 +5,7 @@ use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Http\Controllers\View\LocationController;
+use App\Http\Controllers\View\RoomController;
 
 Route::get('/', function () {
     return Inertia::render('Welcome', [
@@ -17,6 +18,7 @@ Route::get('/', function () {
 
 Route::prefix('/locations')->group(function () {
     Route::get('/{location:slug}', [LocationController::class, 'show'])->name('locations.show');
+    Route::get('/{location:slug}/room/{room:slug}', [RoomController::class, 'show'])->name('room.show');
 });
 
 Route::middleware('auth')->group(function () {
