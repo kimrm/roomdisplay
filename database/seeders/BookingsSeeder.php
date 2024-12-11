@@ -26,17 +26,7 @@ class BookingsSeeder extends Seeder
         $room1 = Room::factory()->create([
             'location_id' => $location->id,
             'name' => 'Test Room 1',
-            'slug' => 'test-room-1',
-        ]);
-        $room2 = Room::factory()->create([
-            'location_id' => $location->id,
-            'name' => 'Test Room 2',
-            'slug' => 'test-room-2',
-        ]);
-        $room3 = Room::factory()->create([
-            'location_id' => $location->id,
-            'name' => 'Test Room 3',
-            'slug' => 'test-room-3',
+            'slug' => Room::generateUniqueSlug('Test Room 1', $location->id),
         ]);
         $startFrom = now()->startOfDay();
         $endIn = $startFrom->copy()->addHour();
