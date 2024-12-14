@@ -1,8 +1,8 @@
 import Clock from "@/Components/Clock";
 import LocationLayout from "@/Layouts/LocationLayout";
-import { Location } from "@/types";
+import { Booking, Location } from "@/types";
 import { Head } from "@inertiajs/react";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import BookingsList from "./BookingsList";
 import Progressbar from "./Progressbar";
 
@@ -12,8 +12,9 @@ interface LocationPageProps {
 
 export default function LocationPage({ location }: LocationPageProps) {
     const [currentPage, setCurrentPage] = useState(0);
-    const [bookingsPerPage, setBookingsPerPage] = useState(0);
-    const [bookings, setBookings] = useState(location.data.bookingsToDay);
+    const [bookingsPerPage, setBookingsPerPage] = useState(1);
+    const [locationData, setLocationData] = useState(location.data);
+    const [visibleBookings, setVisibleBookings] = useState<Booking[]>([]);
     const [pages, setPages] = useState([]);
 
     useEffect(() => {
@@ -21,29 +22,44 @@ export default function LocationPage({ location }: LocationPageProps) {
     }, []);
 
     useEffect(() => {
-        if (bookingsPerPage > 0) {
-            const totalPages =
-                Math.ceil(
-                    location.data.bookingsToDay.length / bookingsPerPage,
-                ) + 1;
-            setPages(Array.from({ length: totalPages }));
-            const timer = setInterval(() => {
-                setCurrentPage((prevPage) => (prevPage + 1) % totalPages);
-            }, 20000);
+        // TODO: problem. the interval gets reset if the locationData changes. needs refactoring.
+        const totalPages =
+            Math.ceil(locationData.bookingsToDay.length / bookingsPerPage) + 1;
+        setPages(Array.from({ length: totalPages }));
+        const timer = setInterval(() => {
+            setCurrentPage((prevPage) => (prevPage + 1) % totalPages);
+        }, 20000);
 
-            return () => {
-                clearInterval(timer);
-            };
-        }
-    }, [currentPage, bookings, bookingsPerPage, location]);
+        return () => {
+            clearInterval(timer);
+        };
+    }, [locationData.bookingsToDay.length, bookingsPerPage]);
 
     useEffect(() => {
-        const updatedVisibleBookings = location.data.bookingsToDay.slice(
+        console.log("Current page: ", currentPage);
+    }, [currentPage]);
+
+    useEffect(() => {
+        const fetchLocation = async () => {
+            const response = await fetch("/api/locations/" + location.data.id);
+            const data = await response.json();
+            setLocationData(data);
+        };
+        const interval = setInterval(() => {
+            fetchLocation();
+        }, 60000);
+        return () => {
+            clearInterval(interval);
+        };
+    }, [location.data.id]);
+
+    useEffect(() => {
+        const updatedVisibleBookings = locationData.bookingsToDay.slice(
             currentPage * bookingsPerPage,
             (currentPage + 1) * bookingsPerPage,
         );
-        setBookings(updatedVisibleBookings);
-    }, [location, bookingsPerPage, currentPage]);
+        setVisibleBookings(updatedVisibleBookings);
+    }, [locationData.bookingsToDay, currentPage, bookingsPerPage]);
 
     return (
         <LocationLayout>
@@ -54,15 +70,15 @@ export default function LocationPage({ location }: LocationPageProps) {
             >
                 <div className="mb-5 flex justify-between">
                     <h1 className="text-4xl font-extrabold">
-                        {import.meta.env.VITE_VENUE_NAME} - {location.data.name}
+                        {import.meta.env.VITE_VENUE_NAME} - {locationData.name}
                     </h1>
                     <Clock className="rounded bg-slate-50 p-4 text-4xl text-slate-950" />
                 </div>
-                {bookings && bookings.length > 0 ? (
-                    <BookingsList bookings={bookings} />
+                {visibleBookings && visibleBookings.length > 0 ? (
+                    <BookingsList bookings={visibleBookings} />
                 ) : (
                     <p className="text-6xl font-extrabold">
-                        {location.data.displayMessage}
+                        {locationData.displayMessage}
                     </p>
                 )}
                 {pages.length > 1 && (

@@ -22,8 +22,8 @@ export interface Room {
 export interface Booking {
     id: string;
     name: string;
-    start: string;
-    end: string;
+    start: date;
+    end: date;
     room: Room;
 }
 
