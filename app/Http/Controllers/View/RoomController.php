@@ -38,7 +38,10 @@ class RoomController extends Controller
      */
     public function show(Location $location, Room $room)
     {
-        dd($room->name);
+        return inertia('Display/Room/RoomPage', [
+            'location' => $location,
+            'room' => $room,
+        ]);
     }
 
     /**
