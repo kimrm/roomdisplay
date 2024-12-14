@@ -16,6 +16,10 @@ Route::get('/', function () {
     ]);
 });
 
+route::get('/phpinfo', function () {
+    return now()->toDateTimeString();
+});
+
 Route::prefix('/locations')->group(function () {
     Route::get('/{location:slug}', [LocationController::class, 'show'])->name('locations.show');
     Route::get('/{location:slug}/room/{room:slug}', [RoomController::class, 'show'])->name('room.show');
