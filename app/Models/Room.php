@@ -23,4 +23,23 @@ class Room extends Model
 
         return $slug;
     }
+
+    public function location()
+    {
+        return $this->belongsTo(Location::class);
+    }
+
+    public function bookings()
+    {
+        return $this->hasMany(Booking::class);
+    }
+
+    public function bookingsToDay()
+    {
+        return $this->bookings()
+            ->where('start', '>=', now()->startOfDay()->toDateTimeString()) // UTC basert
+            ->where('end', '<=', now()->endOfDay()->toDateTimeString())
+            ->where('end', '>=', now()->toDateTimeString())
+            ->orderBy('start');
+    }
 }
