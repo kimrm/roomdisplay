@@ -1,22 +1,79 @@
+import { useEffect, useState } from "react";
+import Clock from "@/Components/Clock";
 import RoomLayout from "@/Layouts/RoomLayout";
+import { Booking, Room, Location } from "@/types";
 
-export default function RoomPage() {
-    const room = {
-        name: "Room 1",
-    };
+export default function RoomPage(props: props) {
+    const [currentBooking, setCurrentBooking] = useState<Booking | null>(null);
+    const [bookingsToCome, setBookingsToCome] = useState<Booking[]>([]);
+    const [room, setRoom] = useState<Room | null>(null);
 
-    const booking = {};
+    useEffect(() => {
+        setRoom(props.room?.data || null);
+    }, [props.room]);
+
+    useEffect(() => {
+        const now = new Date();
+        const currentBooking = props.bookings?.find((booking) => {
+            const start = new Date(booking.start);
+            const end = new Date(booking.end);
+            return start <= now && now <= end;
+        });
+        const currentBookingWithFormattedDates = currentBooking
+            ? {
+                  ...currentBooking,
+                  start: new Date(currentBooking.start).toLocaleTimeString(
+                      "no-NO",
+                      {
+                          hour: "numeric",
+                          minute: "numeric",
+                      },
+                  ),
+                  end: new Date(currentBooking.end).toLocaleTimeString(
+                      "no-NO",
+                      {
+                          hour: "numeric",
+                          minute: "numeric",
+                      },
+                  ),
+              }
+            : null;
+        setCurrentBooking(currentBookingWithFormattedDates || null);
+    }, [props.bookings]);
+
+    useEffect(() => {
+        const now = new Date();
+        const bookingsToCome = props.bookings?.filter((booking) => {
+            const start = new Date(booking.start);
+            return start > now;
+        });
+        const bookingsToComeWithFormattedDates = bookingsToCome?.map(
+            (booking) => {
+                const start = new Date(booking.start).toLocaleTimeString(
+                    "no-NO",
+                    {
+                        hour: "numeric",
+                        minute: "numeric",
+                    },
+                );
+                const end = new Date(booking.end).toLocaleTimeString("no-NO", {
+                    hour: "numeric",
+                    minute: "numeric",
+                });
+                return { ...booking, start, end };
+            },
+        );
+        setBookingsToCome(bookingsToComeWithFormattedDates || []);
+    }, [props.bookings]);
 
     const date = new Date().toLocaleString("no-NO", {
         day: "numeric",
         month: "short",
-        hour: "2-digit",
-        minute: "2-digit",
     });
 
     return (
         <RoomLayout>
-            <div className="flex flex-row">
+            <div className="flex flex-row bg-black">
                 <div
                     id="occupied"
                     className="h-screen w-12 bg-green-500 md:w-24"
@@ -27,7 +84,7 @@ export default function RoomPage() {
                             <h1 className="mb-3 mt-3 inline-block align-middle font-sans text-5xl">
                                 <span className="ml-6 font-bold uppercase">
                                     {" "}
-                                    {room.name}
+                                    {room?.name}
                                 </span>
                             </h1>
                             <div className="flex flex-row items-baseline space-x-3">
@@ -39,7 +96,7 @@ export default function RoomPage() {
                                         className="hidden align-middle text-4xl font-bold sm:block"
                                         id="clock"
                                     >
-                                        {date}
+                                        <Clock />
                                     </div>
                                 </span>
                             </div>
@@ -47,7 +104,7 @@ export default function RoomPage() {
                     </header>
                     <main className="mb-auto">
                         <div id="events_container">
-                            {booking ? (
+                            {currentBooking ? (
                                 <div id="available" className="px-12">
                                     <div className="inline-block border-b-2">
                                         <span className="text-3xl font-bold tracking-wider text-gray-400">
@@ -56,23 +113,21 @@ export default function RoomPage() {
                                     </div>
                                     <div>
                                         <p className="mb-2 mt-4 text-6xl text-gray-200">
-                                            BOOKING NAVN
+                                            {currentBooking?.name}
                                         </p>
                                     </div>
                                     <div className="text-4xl tracking-widest text-gray-400">
-                                        Hele dagen
+                                        {currentBooking?.start} -{" "}
+                                        {currentBooking?.end}
                                     </div>
                                 </div>
                             ) : (
                                 <div>
                                     <div className="mt-12 px-12 text-6xl font-bold tracking-widest text-white">
-                                        LEDIG 🙂
+                                        Rom er ledig
                                     </div>
                                     <p className="mt-12 w-2/3 px-12 text-gray-200">
-                                        Studenter kan fritt benytte rommet, men
-                                        vær oppmerksom på at andre kan ha
-                                        reservert rommet for et senere tidspunkt
-                                        i dag.
+                                        {room?.displayMessage}
                                     </p>
                                 </div>
                             )}
@@ -80,22 +135,30 @@ export default function RoomPage() {
                     </main>
                     <footer>
                         <div id="bookings" className="p-12 text-gray-300">
-                            {booking ? (
+                            {bookingsToCome.length > 0 ? (
                                 <div>
                                     <div className="mb-4 text-xl font-bold tracking-tight text-gray-500">
                                         KOMMENDE ARRANGEMENT
                                     </div>
                                     <div className="space-y-2 text-xl">
-                                        <div className="grid grid-cols-2">
-                                            <div>BOOKING NAME</div>
-                                            <div>08:00 - 10:00</div>
-                                        </div>
+                                        {bookingsToCome.map((booking) => (
+                                            <div
+                                                key={booking.id}
+                                                className="grid grid-cols-2"
+                                            >
+                                                <div>{booking.name}</div>
+                                                <div>
+                                                    {booking.start} -{" "}
+                                                    {booking.end}
+                                                </div>
+                                            </div>
+                                        ))}
                                     </div>
                                 </div>
                             ) : (
                                 <div>
-                                    Kontakt Studiesenteret Midt-Troms for leie
-                                    av rom
+                                    Kontakt {import.meta.env.VITE_VENUE_NAME}{" "}
+                                    for leie av rom
                                 </div>
                             )}
                         </div>
@@ -105,3 +168,11 @@ export default function RoomPage() {
         </RoomLayout>
     );
 }
+
+type props = {
+    location?: Location;
+    room?: {
+        data: Room;
+    };
+    bookings?: Booking[];
+};

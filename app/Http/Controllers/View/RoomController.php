@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\View;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\RoomResource;
 use App\Models\Location;
 use App\Models\Room;
 use Illuminate\Http\Request;
@@ -38,9 +39,11 @@ class RoomController extends Controller
      */
     public function show(Location $location, Room $room)
     {
+
         return inertia('Display/Room/RoomPage', [
             'location' => $location,
-            'room' => $room,
+            'room' => new RoomResource($room),
+            'bookings' => $room->bookingsToDay()->get(),
         ]);
     }
 

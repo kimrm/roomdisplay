@@ -17,6 +17,7 @@ export interface Location {
 export interface Room {
     id: string;
     name: string;
+    displayMessage?: string;
 }
 
 export interface Booking {
