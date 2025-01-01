@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\View;
+namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Booking;
@@ -13,7 +13,9 @@ class BookingController extends Controller
      */
     public function index()
     {
-        //
+        return inertia('Admin/Bookings/Index', [
+            'bookingsPaginate' => Booking::paginate(),
+        ]);
     }
 
     /**
