@@ -22,5 +22,5 @@ export default function Clock(props: props) {
 }
 
 type props = {
-    className: string;
+    className?: string;
 };

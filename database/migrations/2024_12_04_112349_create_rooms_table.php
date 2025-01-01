@@ -15,10 +15,12 @@ return new class extends Migration
             $table->id();
             $table->foreignId('location_id')->constrained();
             $table->string('name');
-            $table->string('slug')->unique();
+            $table->string('slug');
             $table->text('description')->nullable();
             $table->text('display_message')->nullable();
             $table->timestamps();
+
+            $table->unique(['slug', 'location_id']);
         });
     }
 

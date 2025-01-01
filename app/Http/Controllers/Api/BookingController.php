@@ -1,14 +1,13 @@
 <?php
 
-namespace App\Http\Controllers\View;
+namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\RoomResource;
-use App\Models\Location;
-use App\Models\Room;
 use Illuminate\Http\Request;
+use App\Models\Booking;
+use Carbon\Carbon;
 
-class RoomController extends Controller
+class BookingController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -31,26 +30,27 @@ class RoomController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = $request->all();
+        $data['start'] = Carbon::parse($data['start'], $request->header('Timezone', 'UTC'))->setTimezone('UTC');
+        $data['end'] = Carbon::parse($data['end'], $request->header('Timezone', 'UTC'))->setTimezone('UTC');
+
+        $booking = Booking::create($data);
+
+        return response()->json($booking, 201);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Location $location, Room $room)
+    public function show(string $id)
     {
-
-        return inertia('Display/Room/RoomPage', [
-            'location' => $location,
-            'room' => new RoomResource($room),
-            'bookings' => $room->bookingsToDay()->get(),
-        ]);
+        //
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Room $room)
+    public function edit(string $id)
     {
         //
     }
@@ -58,7 +58,7 @@ class RoomController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Room $room)
+    public function update(Request $request, string $id)
     {
         //
     }
@@ -66,7 +66,7 @@ class RoomController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Room $room)
+    public function destroy(string $id)
     {
         //
     }
