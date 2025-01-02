@@ -5,13 +5,19 @@ export interface User {
     email_verified_at?: string;
 }
 
-export interface Location {
+export interface LocationData {
     data: {
         id: string;
         name: string;
         displayMessage: string;
         bookingsToDay: Booking[];
     };
+}
+
+export interface Location {
+    id: string;
+    name: string;
+    displayMessage: string;
 }
 
 export interface Room {

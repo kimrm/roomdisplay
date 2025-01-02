@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Http\Controllers\View;
+namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Location;
 use App\Models\Room;
 use Illuminate\Http\Request;
 
@@ -13,7 +14,9 @@ class RoomController extends Controller
      */
     public function index()
     {
-        //
+        return inertia('Admin/Rooms/Index', [
+            'rooms' => Room::with('location')->get()
+        ]);
     }
 
     /**
@@ -21,7 +24,9 @@ class RoomController extends Controller
      */
     public function create()
     {
-        //
+        return inertia('Admin/Rooms/Create', [
+            'locations' => Location::all()
+        ]);
     }
 
     /**
@@ -29,7 +34,27 @@ class RoomController extends Controller
      */
     public function store(Request $request)
     {
-        //
+
+        $request->validate([
+            'location_id' => 'required|exists:locations,id',
+            'name' => 'required|string',
+            'description' => 'nullable|string',
+            'display_message' => 'nullable|string',
+            'calendar_id' => 'nullable|string',
+            'service' => 'nullable|string'
+        ]);
+
+        Room::create([
+            'location_id' => $request->location_id,
+            'name' => $request->name,
+            'slug' => Room::generateUniqueSlug($request->name, $request->location_id),
+            'description' => $request->description,
+            'display_message' => $request->display_message,
+            'calendar_id' => $request->calendar_id,
+            'service' => $request->service
+        ]);
+
+        return redirect()->route('rooms.index');
     }
 
     /**
