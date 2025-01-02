@@ -1,13 +1,13 @@
 import Clock from "@/Components/Clock";
 import LocationLayout from "@/Layouts/LocationLayout";
-import { Booking, Location } from "@/types";
+import { Booking, LocationData } from "@/types";
 import { Head } from "@inertiajs/react";
 import { useEffect, useState } from "react";
 import BookingsList from "./BookingsList";
 import Progressbar from "./Progressbar";
 
 interface LocationPageProps {
-    location: Location;
+    location: LocationData;
 }
 
 export default function LocationPage({ location }: LocationPageProps) {
