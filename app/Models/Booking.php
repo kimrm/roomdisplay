@@ -14,7 +14,8 @@ class Booking extends Model
         'room_id',
         'start',
         'end',
-        'name'
+        'name',
+        'sync_identifier',
     ];
 
     public function room(): BelongsTo
