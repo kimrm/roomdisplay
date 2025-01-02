@@ -23,7 +23,7 @@ class BookingController extends Controller
      */
     public function create()
     {
-        //
+        return inertia('Admin/Bookings/Create');
     }
 
     /**
