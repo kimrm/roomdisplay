@@ -10,6 +10,16 @@ class Room extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'location_id',
+        'name',
+        'slug',
+        'description',
+        'display_message',
+        'calendar_id',
+        'service'
+    ];
+
     public static function generateUniqueSlug($name, $locationId)
     {
         $slug = Str::slug($name);
