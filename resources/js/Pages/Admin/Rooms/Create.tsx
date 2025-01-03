@@ -4,8 +4,8 @@ import { Location } from "@/types";
 import SecondaryButton from "@/Components/SecondaryButton";
 import InputLabel from "@/Components/InputLabel";
 import TextInput from "@/Components/TextInput";
-import { useState } from "react";
-import { router } from "@inertiajs/react";
+import { router, useForm } from "@inertiajs/react";
+import Checkbox from "@/Components/Checkbox";
 
 interface Props {
     locations: Location[];
@@ -13,29 +13,31 @@ interface Props {
 
 export default function RoomsCreate(props: Props) {
     const { locations } = props;
-    const [formData, setFormData] = useState({
+
+    const { data, setData, post, processing, errors } = useForm({
         location_id: "",
         name: "",
         description: "",
         displayMessage: "",
-        sync: "google",
+        sync: "",
         calendar_id: "",
     });
 
     function handleChange(
-        event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+        event: React.ChangeEvent<
+            HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
+        >,
     ) {
-        const { name, value } = event.target;
-        setFormData((prev) => ({
-            ...prev,
-            [name]: value,
-        }));
+        setData(event.target.name as keyof typeof data, event.target.value);
     }
 
     function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
         event.preventDefault();
-        console.log(formData);
-        router.post("/dashboard/rooms", formData);
+        post("/dashboard/rooms");
+    }
+
+    function handleCancel() {
+        router.visit("/dashboard/rooms");
     }
     return (
         <AuthenticatedLayout
@@ -48,13 +50,16 @@ export default function RoomsCreate(props: Props) {
             <div className="py-12">
                 <div className="mx-auto max-w-7xl space-y-6 sm:px-6 lg:px-8">
                     <div className="bg-white p-4 shadow sm:rounded-lg sm:p-8 dark:bg-gray-800">
+                        <h3 className="mb-4 dark:text-white">
+                            Registrer et nytt rom
+                        </h3>
                         <form onSubmit={handleSubmit}>
                             <div>
                                 <select
                                     id="location_id"
                                     name="location_id"
                                     onChange={handleChange}
-                                    value={formData.location}
+                                    value={data.location_id}
                                     className="mt-1 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                                 >
                                     <option value="">Velg lokasjon</option>
@@ -69,6 +74,11 @@ export default function RoomsCreate(props: Props) {
                                         );
                                     })}
                                 </select>
+                                {errors.location_id && (
+                                    <em className="block text-red-500">
+                                        {errors.location_id}
+                                    </em>
+                                )}
                             </div>
                             <div className="mt-4">
                                 <InputLabel htmlFor="name">Navn</InputLabel>
@@ -76,9 +86,15 @@ export default function RoomsCreate(props: Props) {
                                     id="name"
                                     name="name"
                                     type="text"
-                                    value={formData.name}
+                                    value={data.name}
                                     onChange={handleChange}
+                                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm md:w-1/2"
                                 />
+                                {errors.name && (
+                                    <em className="block text-red-500">
+                                        {errors.name}
+                                    </em>
+                                )}
                             </div>
                             <div className="mt-4">
                                 <InputLabel htmlFor="description">
@@ -88,47 +104,67 @@ export default function RoomsCreate(props: Props) {
                                     id="description"
                                     name="description"
                                     type="text"
-                                    value={formData.description}
+                                    value={data.description}
                                     onChange={handleChange}
+                                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm md:w-1/2"
                                 />
                             </div>
                             <div className="mt-4">
                                 <InputLabel htmlFor="displayMessage">
                                     Visningsmelding
                                 </InputLabel>
-                                <TextInput
+                                <textarea
                                     id="displayMessage"
                                     name="displayMessage"
-                                    type="text"
-                                    value={formData.displayMessage}
+                                    value={data.displayMessage}
                                     onChange={handleChange}
+                                    rows={10}
+                                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                                 />
                             </div>
                             <div className="mt-4">
-                                <h2>Synkronisering</h2>
-                                <label htmlFor="sync">Google Calendar</label>
-                                <input
-                                    type="radio"
+                                <h2 className="mb-2">Synkronisering</h2>
+                                <InputLabel
+                                    htmlFor="sync"
+                                    className="mr-2 inline"
+                                >
+                                    Google Calendar
+                                </InputLabel>
+                                <Checkbox
                                     id="sync"
                                     name="sync"
                                     value="google"
                                     checked={true}
                                     readOnly={true}
+                                    onChange={handleChange}
                                 />
-                                <label htmlFor="calendar_id">Kalender ID</label>
-                                <input
+                                <InputLabel
+                                    htmlFor="calendar_id"
+                                    className="mt-2"
+                                >
+                                    Kalender ID
+                                </InputLabel>
+                                <TextInput
                                     type="text"
                                     id="calendar_id"
                                     name="calendar_id"
-                                    value={formData.calendar_id}
+                                    value={data.calendar_id}
                                     onChange={handleChange}
+                                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                                 />
                             </div>
                             <div className="mt-6 space-x-4">
-                                <PrimaryButton type="submit">
+                                <PrimaryButton
+                                    type="submit"
+                                    disabled={processing}
+                                >
                                     Lagre
                                 </PrimaryButton>
-                                <SecondaryButton type="button">
+                                <SecondaryButton
+                                    type="button"
+                                    onClick={handleCancel}
+                                    disabled={processing}
+                                >
                                     Avbryt
                                 </SecondaryButton>
                             </div>
