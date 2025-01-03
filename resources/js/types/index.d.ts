@@ -16,14 +16,18 @@ export interface LocationData {
 
 export interface Location {
     id: string;
+    slug: string;
     name: string;
     displayMessage: string;
 }
 
 export interface Room {
     id: string;
+    slug: string;
     name: string;
     displayMessage?: string;
+    service?: string;
+    location?: Location;
 }
 
 export interface Booking {
