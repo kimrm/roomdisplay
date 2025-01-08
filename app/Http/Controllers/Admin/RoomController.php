@@ -41,7 +41,7 @@ class RoomController extends Controller
             'description' => 'nullable|string',
             'display_message' => 'nullable|string',
             'calendar_id' => 'nullable|string',
-            'service' => 'nullable|string'
+            'sync' => 'nullable|string'
         ]);
 
         Room::create([
@@ -51,7 +51,7 @@ class RoomController extends Controller
             'description' => $request->description,
             'display_message' => $request->display_message,
             'calendar_id' => $request->calendar_id,
-            'service' => $request->service
+            'service' => $request->sync
         ]);
 
         return redirect()->route('rooms.index');

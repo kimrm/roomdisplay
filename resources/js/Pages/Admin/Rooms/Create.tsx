@@ -5,7 +5,6 @@ import SecondaryButton from "@/Components/SecondaryButton";
 import InputLabel from "@/Components/InputLabel";
 import TextInput from "@/Components/TextInput";
 import { router, useForm } from "@inertiajs/react";
-import Checkbox from "@/Components/Checkbox";
 
 interface Props {
     locations: Location[];
@@ -30,7 +29,6 @@ export default function RoomsCreate(props: Props) {
     ) {
         setData(event.target.name as keyof typeof data, event.target.value);
     }
-
     function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
         event.preventDefault();
         post("/dashboard/rooms");
@@ -124,20 +122,31 @@ export default function RoomsCreate(props: Props) {
                             </div>
                             <div className="mt-4">
                                 <h2 className="mb-2">Synkronisering</h2>
-                                <InputLabel
-                                    htmlFor="sync"
-                                    className="mr-2 inline"
-                                >
-                                    Google Calendar
-                                </InputLabel>
-                                <Checkbox
-                                    id="sync"
-                                    name="sync"
-                                    value="google"
-                                    checked={true}
-                                    readOnly={true}
-                                    onChange={handleChange}
-                                />
+                                <div>
+                                    <input
+                                        type="radio"
+                                        id="off"
+                                        name="sync"
+                                        value=""
+                                        onChange={handleChange}
+                                        checked={data.sync === ""}
+                                    />
+                                    <label htmlFor="off" className="ml-1">
+                                        Av
+                                    </label>
+                                    <input
+                                        type="radio"
+                                        id="google"
+                                        name="sync"
+                                        value="google"
+                                        onChange={handleChange}
+                                        checked={data.sync === "google"}
+                                        className="ml-4"
+                                    />
+                                    <label htmlFor="google" className="ml-1">
+                                        Google Calendar
+                                    </label>
+                                </div>
                                 <InputLabel
                                     htmlFor="calendar_id"
                                     className="mt-2"
@@ -150,7 +159,8 @@ export default function RoomsCreate(props: Props) {
                                     name="calendar_id"
                                     value={data.calendar_id}
                                     onChange={handleChange}
-                                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                                    disabled={data.sync !== "google"}
+                                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 disabled:bg-neutral-800 sm:text-sm"
                                 />
                             </div>
                             <div className="mt-6 space-x-4">
