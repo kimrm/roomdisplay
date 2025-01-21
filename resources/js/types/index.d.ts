@@ -26,8 +26,14 @@ export interface Room {
     slug: string;
     name: string;
     displayMessage?: string;
+    description?: string;
     service?: string;
+    calendarId?: string;
     location?: Location;
+}
+
+export interface RoomResponse {
+    data: Room;
 }
 
 export interface Booking {
