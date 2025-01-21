@@ -1,26 +1,28 @@
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import PrimaryButton from "@/Components/PrimaryButton";
-import { Location, Room } from "@/types";
+import { Location, RoomResponse } from "@/types";
 import SecondaryButton from "@/Components/SecondaryButton";
 import InputLabel from "@/Components/InputLabel";
 import TextInput from "@/Components/TextInput";
+import TextArea from "@/Components/TextArea";
+import Select from "@/Components/Select";
 import { router, useForm } from "@inertiajs/react";
 
 interface Props {
-    room: Room;
+    roomResponse: RoomResponse;
     locations: Location[];
 }
 
-export default function RoomsCreate(props: Props) {
-    const { locations } = props;
-    const { room } = props;
+export default function RoomsCreate({ locations, roomResponse }: Props) {
+    const { data: room } = roomResponse;
+
     const { data, setData, post, processing, errors } = useForm({
-        location_id: "",
-        name: "",
-        description: "",
-        displayMessage: "",
-        sync: "",
-        calendar_id: "",
+        location_id: room.location?.id,
+        name: room.name,
+        description: room.description,
+        displayMessage: room.displayMessage,
+        sync: room.service,
+        calendar_id: room.calendarId,
     });
 
     function handleChange(
@@ -42,24 +44,21 @@ export default function RoomsCreate(props: Props) {
         <AuthenticatedLayout
             header={
                 <h2 className="text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200">
-                    Rediger rom
+                    Rom
                 </h2>
             }
         >
-            <div className="py-12">
+            <div className="py-12 dark:text-white">
                 <div className="mx-auto max-w-7xl space-y-6 sm:px-6 lg:px-8">
                     <div className="bg-white p-4 shadow sm:rounded-lg sm:p-8 dark:bg-gray-800">
-                        <h3 className="mb-4 dark:text-white">
-                            Registrer et nytt rom
-                        </h3>
+                        <h3 className="mb-4">Rediger {room.name}</h3>
                         <form onSubmit={handleSubmit}>
                             <div>
-                                <select
+                                <Select
                                     id="location_id"
                                     name="location_id"
+                                    defaultValue={data.location_id}
                                     onChange={handleChange}
-                                    value={data.location_id}
-                                    className="mt-1 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                                 >
                                     <option value="">Velg lokasjon</option>
                                     {locations.map((location) => {
@@ -72,7 +71,7 @@ export default function RoomsCreate(props: Props) {
                                             </option>
                                         );
                                     })}
-                                </select>
+                                </Select>
                                 {errors.location_id && (
                                     <em className="block text-red-500">
                                         {errors.location_id}
@@ -112,18 +111,17 @@ export default function RoomsCreate(props: Props) {
                                 <InputLabel htmlFor="displayMessage">
                                     Visningsmelding
                                 </InputLabel>
-                                <textarea
+                                <TextArea
                                     id="displayMessage"
                                     name="displayMessage"
                                     value={data.displayMessage}
                                     onChange={handleChange}
                                     rows={10}
-                                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                                 />
                             </div>
-                            <div className="mt-4">
+                            <div className="my-4">
                                 <h2 className="mb-2">Synkronisering</h2>
-                                <div>
+                                <div className="mb-4">
                                     <input
                                         type="radio"
                                         id="off"
