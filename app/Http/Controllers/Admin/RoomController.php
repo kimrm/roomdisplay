@@ -70,7 +70,10 @@ class RoomController extends Controller
      */
     public function edit(Room $room)
     {
-        //
+        return inertia('Admin/Rooms/Edit', [
+            'room' => $room,
+            'locations' => Location::all()
+        ]);
     }
 
     /**
