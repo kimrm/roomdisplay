@@ -84,7 +84,18 @@ class RoomController extends Controller
      */
     public function update(Request $request, Room $room)
     {
-        //
+        $attributes = $request->validate([
+            'location_id' => 'required|exists:locations,id',
+            'name' => 'required|string',
+            'description' => 'nullable|string',
+            'display_message' => 'nullable|string',
+            'calendar_id' => 'nullable|string',
+            'sync' => 'nullable|string'
+        ]);
+
+        $room->update($attributes);
+
+        return redirect()->route('rooms.index');
     }
 
     /**
