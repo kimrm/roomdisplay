@@ -16,11 +16,11 @@ interface Props {
 export default function RoomsCreate({ locations, roomResponse }: Props) {
     const { data: room } = roomResponse;
 
-    const { data, setData, post, processing, errors } = useForm({
+    const { data, setData, patch, processing, errors } = useForm({
         location_id: room.location?.id,
         name: room.name,
         description: room.description,
-        displayMessage: room.displayMessage,
+        display_message: room.displayMessage,
         sync: room.service,
         calendar_id: room.calendarId,
     });
@@ -34,7 +34,7 @@ export default function RoomsCreate({ locations, roomResponse }: Props) {
     }
     function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
         event.preventDefault();
-        post("/dashboard/rooms");
+        patch("/dashboard/rooms/" + room.id);
     }
 
     function handleCancel() {
@@ -108,13 +108,13 @@ export default function RoomsCreate({ locations, roomResponse }: Props) {
                                 />
                             </div>
                             <div className="mt-4">
-                                <InputLabel htmlFor="displayMessage">
+                                <InputLabel htmlFor="display_message">
                                     Visningsmelding
                                 </InputLabel>
                                 <TextArea
-                                    id="displayMessage"
-                                    name="displayMessage"
-                                    value={data.displayMessage}
+                                    id="display_message"
+                                    name="display_message"
+                                    value={data.display_message}
                                     onChange={handleChange}
                                     rows={10}
                                 />
