@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Location;
 use App\Models\Room;
 use Illuminate\Http\Request;
+use App\Http\Resources\RoomResource;
 
 class RoomController extends Controller
 {
@@ -70,8 +71,10 @@ class RoomController extends Controller
      */
     public function edit(Room $room)
     {
+        $room->load('location');
+
         return inertia('Admin/Rooms/Edit', [
-            'room' => $room,
+            'roomResponse' => new RoomResource($room),
             'locations' => Location::all()
         ]);
     }
