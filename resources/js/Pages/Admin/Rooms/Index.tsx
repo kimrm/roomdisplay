@@ -19,56 +19,85 @@ export default function RoomsPage({ rooms }: RoomProps) {
 
             <div className="py-12">
                 <div className="mx-auto max-w-7xl space-y-6 sm:px-6 lg:px-8">
-                    <div className="flex justify-end">
-                        <Link
-                            href="/dashboard/rooms/create"
-                            className="rounded-md bg-white px-4 py-2 hover:bg-gray-200 dark:bg-gray-800 dark:text-white"
-                        >
-                            Nytt rom
-                        </Link>
-                    </div>
                     <div className="bg-white p-4 shadow sm:rounded-lg sm:p-8 dark:bg-gray-800">
-                        <h3 className="mb-4 dark:text-white">Romoversikt</h3>
-                        <table className="w-full">
-                            <caption className="sr-only">Romoversikt</caption>
-                            <thead>
-                                <tr>
-                                    <th className="text-start">ID</th>
-                                    <th className="text-start">Name</th>
-                                    <th className="text-start">Lokasjon</th>
-                                    <th className="text-start">Synk.</th>
-                                    <th className="text-start">Link</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {rooms.map((room) => (
-                                    <tr key={room.id}>
-                                        <td>{room.id}</td>
-                                        <td>{room.name}</td>
-                                        <td>{room.location?.name}</td>
-                                        <td>
+                        <div className="mb-4 flex items-center justify-between">
+                            <h3 className="text-xl dark:text-white">
+                                Romoversikt
+                            </h3>
+                            <Link
+                                href="/dashboard/rooms/create"
+                                className="flex items-center justify-center rounded-md bg-purple-50 px-4 py-2 hover:bg-purple-200 dark:bg-gray-800 dark:text-white"
+                            >
+                                <svg
+                                    fill="none"
+                                    strokeWidth={1.5}
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    aria-hidden="true"
+                                    className="mr-2 inline-block h-6 w-6"
+                                >
+                                    <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+                                    />
+                                </svg>
+                                Nytt rom
+                            </Link>
+                        </div>
+                        <ul className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+                            {rooms.map((room) => {
+                                return (
+                                    <li
+                                        key={room.id}
+                                        className="relative rounded-md bg-neutral-50 p-4 hover:bg-neutral-100"
+                                    >
+                                        <div className="absolute right-0 top-0 p-2">
+                                            <Link
+                                                href={`/dashboard/rooms/${room.id}/edit`}
+                                                className="text-blue-500 hover:text-blue-600"
+                                            >
+                                                Rediger
+                                            </Link>
+                                        </div>
+                                        <div>
+                                            <h2 className="text-lg">
+                                                {room.name}
+                                            </h2>
+                                            <br />
+                                            <span className="font-semibold">
+                                                Lokasjon:
+                                            </span>{" "}
+                                            {room.location?.name}
+                                            <br />
+                                            <span className="font-semibold">
+                                                Synk.:
+                                            </span>{" "}
                                             {room.service ? (
-                                                <span className="text-green-500">
+                                                <span className="rounded bg-green-800 px-2 text-green-50">
                                                     Aktiv
                                                 </span>
                                             ) : (
-                                                <span className="text-yellow-500">
+                                                <span className="rounded bg-yellow-300 px-2 text-black">
                                                     Inaktiv
                                                 </span>
                                             )}
-                                        </td>
-                                        <td>
+                                            <br />
+                                            <span className="font-semibold">
+                                                Link:
+                                            </span>{" "}
                                             <a
                                                 href={`/locations/${room.location?.slug}/room/${room.slug}`}
                                                 target="blank"
                                             >
                                                 {room.slug}
                                             </a>
-                                        </td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
+                                        </div>
+                                    </li>
+                                );
+                            })}
+                        </ul>
                     </div>
                 </div>
             </div>
