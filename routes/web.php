@@ -20,10 +20,6 @@ route::get('/phpinfo', function () {
     return now()->toDateTimeString();
 });
 
-Route::prefix('/locations')->group(function () {
-    Route::get('/{location:slug}', [LocationController::class, 'show'])->name('locations.show');
-    Route::get('/{location:slug}/room/{room:slug}', [RoomController::class, 'show'])->name('room.show');
-});
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -33,3 +29,4 @@ Route::middleware('auth')->group(function () {
 
 require __DIR__ . '/dashboard.php';
 require __DIR__ . '/auth.php';
+require __DIR__ . '/display.php';
