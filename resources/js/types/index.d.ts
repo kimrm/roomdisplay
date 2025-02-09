@@ -9,6 +9,8 @@ export interface LocationData {
     data: {
         id: string;
         name: string;
+        description: string;
+        slug: string;
         displayMessage: string;
         bookingsToDay: Booking[];
     };

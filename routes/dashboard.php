@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+use App\Http\Controllers\Admin\LocationController;
 use App\Http\Controllers\Admin\BookingController;
 use App\Http\Controllers\Admin\RoomController;
 
@@ -14,6 +15,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/', function () {
             return Inertia::render('Dashboard');
         })->name('dashboard');
+
+        Route::resource('locations', LocationController::class);
 
         Route::prefix('/rooms')->group(function () {
             Route::get('/', [RoomController::class, 'index'])->name('rooms.index');

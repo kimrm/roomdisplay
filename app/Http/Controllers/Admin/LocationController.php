@@ -1,10 +1,12 @@
 <?php
 
-namespace App\Http\Controllers\View;
+namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Location;
 use Illuminate\Http\Request;
+use App\Http\Requests\LocationRequest;
+use App\Http\Resources\LocationResource;
 
 class LocationController extends Controller
 {
@@ -13,7 +15,9 @@ class LocationController extends Controller
      */
     public function index()
     {
-        //
+        return inertia('Admin/Locations/Index', [
+            'locations' => Location::all()
+        ]);
     }
 
     /**
@@ -21,15 +25,20 @@ class LocationController extends Controller
      */
     public function create()
     {
-        //
+        return inertia('Admin/Locations/Create');
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(LocationRequest $request)
     {
-        //
+        $validated = $request->validated();
+        $validated['slug'] = Location::generateUniqueSlug($validated['name']);
+
+        Location::create($validated);
+
+        return redirect()->route('locations.index');
     }
 
     /**
@@ -45,15 +54,21 @@ class LocationController extends Controller
      */
     public function edit(Location $location)
     {
-        //
+        return inertia('Admin/Locations/Edit', [
+            'location' => new LocationResource($location)
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Location $location)
+    public function update(LocationRequest $request, Location $location)
     {
-        //
+        $validated = $request->validated();
+
+        $location->update($validated);
+
+        return redirect()->route('locations.index');
     }
 
     /**
