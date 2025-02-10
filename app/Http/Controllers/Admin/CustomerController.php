@@ -2,27 +2,20 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
-use App\Models\Booking;
+use App\Models\Customer;
 use Illuminate\Http\Request;
-use App\Http\Resources\BookingResource;
+use App\Http\Controllers\Controller;
+use App\Http\Resources\CustomerResource;
 
-class BookingController extends Controller
+class CustomerController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $bookings = Booking::with('room')
-            ->with('room.location')
-            ->with('customer')
-            ->where('start', '>=', now()->addDay(-1))
-            ->orderBy('start', 'asc')
-            ->paginate();
-
-        return inertia('Admin/Bookings/Index', [
-            'bookingsPaginate' => BookingResource::collection($bookings),
+        return inertia('Admin/Customers/Index', [
+            'customersPaginate' => CustomerResource::collection(Customer::paginate()),
         ]);
     }
 
@@ -31,7 +24,7 @@ class BookingController extends Controller
      */
     public function create()
     {
-        return inertia('Admin/Bookings/Create');
+        //
     }
 
     /**
@@ -45,7 +38,7 @@ class BookingController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Booking $booking)
+    public function show(Customer $customer)
     {
         //
     }
@@ -53,7 +46,7 @@ class BookingController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Booking $booking)
+    public function edit(Customer $customer)
     {
         //
     }
@@ -61,7 +54,7 @@ class BookingController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Booking $booking)
+    public function update(Request $request, Customer $customer)
     {
         //
     }
@@ -69,7 +62,7 @@ class BookingController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Booking $booking)
+    public function destroy(Customer $customer)
     {
         //
     }

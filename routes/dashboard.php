@@ -5,6 +5,7 @@ use Inertia\Inertia;
 use App\Http\Controllers\Admin\LocationController;
 use App\Http\Controllers\Admin\BookingController;
 use App\Http\Controllers\Admin\RoomController;
+use App\Http\Controllers\Admin\CustomerController;
 
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
@@ -17,6 +18,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         })->name('dashboard');
 
         Route::resource('locations', LocationController::class);
+        Route::resource('customers', CustomerController::class);
 
         Route::prefix('/rooms')->group(function () {
             Route::get('/', [RoomController::class, 'index'])->name('rooms.index');
