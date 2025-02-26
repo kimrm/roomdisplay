@@ -26,6 +26,12 @@ export interface CustomersPaginate {
         from: number;
         to: number;
     };
+    links: {
+        first: string;
+        last: string;
+        next: string;
+        prev: string;
+    };
 }
 
 export interface Location {
@@ -70,6 +76,10 @@ export interface Customer {
     contactName?: string;
     orgNr?: string;
     notes?: string;
+}
+
+export interface CustomerResponse {
+    data: Customer;
 }
 
 export type PageProps<

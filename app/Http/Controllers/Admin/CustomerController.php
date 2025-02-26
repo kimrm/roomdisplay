@@ -40,7 +40,9 @@ class CustomerController extends Controller
      */
     public function show(Customer $customer)
     {
-        //
+        return inertia('Admin/Customers/Show', [
+            'customerResponse' => new CustomerResource($customer),
+        ]);
     }
 
     /**
@@ -48,7 +50,9 @@ class CustomerController extends Controller
      */
     public function edit(Customer $customer)
     {
-        //
+        return inertia('Admin/Customers/Edit', [
+            'customer' => new CustomerResource($customer),
+        ]);
     }
 
     /**

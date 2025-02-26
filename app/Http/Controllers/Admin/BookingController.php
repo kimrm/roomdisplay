@@ -14,15 +14,31 @@ class BookingController extends Controller
      */
     public function index()
     {
-        $bookings = Booking::with('room')
-            ->with('room.location')
-            ->with('customer')
-            ->where('start', '>=', now()->addDay(-1))
-            ->orderBy('start', 'asc')
+        $search  = request()->get('search');
+        $periode = $search ? 'all' : request()->get('periode') ?? 'today';
+
+
+        if ($periode == 'all' || $periode == null) {
+            $bookings = Booking::with('room')
+                ->with('room.location')
+                ->with('customer')
+                ->orderBy('created_at', 'desc');
+        } else {
+            $bookings = Booking::with('room')
+                ->with('room.location')
+                ->with('customer')
+                ->periode($periode)
+                ->orderBy('start', 'asc');
+        }
+
+        $bookings = $bookings
+            ->search($search)
             ->paginate();
 
         return inertia('Admin/Bookings/Index', [
             'bookingsPaginate' => BookingResource::collection($bookings),
+            'periode' => $periode,
+            'search' => $search,
         ]);
     }
 

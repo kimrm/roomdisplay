@@ -1,5 +1,5 @@
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
-import { Head, Link } from "@inertiajs/react";
+import { Head, Link, useForm } from "@inertiajs/react";
 import { Booking } from "@/types";
 
 interface BookingsProps {
@@ -28,33 +28,47 @@ interface BookingsProps {
             next: string | null;
         };
     };
+    periode: string;
+    search: string;
 }
 
-export default function BookingsPage({ bookingsPaginate }: BookingsProps) {
+export default function BookingsPage({
+    bookingsPaginate,
+    periode,
+    search,
+}: BookingsProps) {
     const { data: bookings, links, meta } = bookingsPaginate;
 
-    console.log(links);
+    const {
+        data: formValues,
+        setData,
+        get,
+    } = useForm({
+        periode: periode ?? "all",
+        search: search ?? "",
+    });
+
+    const submit = (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+        get(route("bookings.index"), {
+            replace: true,
+            preserveState: true,
+        });
+    };
+
     return (
-        <AuthenticatedLayout
-            header={
-                <h2 className="text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200">
-                    Bookings
-                </h2>
-            }
-        >
-            <Head title="Profile" />
+        <AuthenticatedLayout>
+            <Head title="Booking" />
 
             <div className="py-12">
                 <div className="mx-auto max-w-7xl space-y-6 sm:px-6 lg:px-8">
                     <div className="bg-white p-4 shadow sm:rounded-lg sm:p-8 dark:bg-gray-800">
-                        <div className="bg-neutral-100 p-4 shadow sm:rounded-lg sm:p-8 dark:bg-gray-800">
-                            <h3 className="text-xl dark:text-white">
-                                Filtrering
-                            </h3>
+                        <div>
                             <div className="my-6 flex items-center justify-between">
                                 <form
+                                    onSubmit={submit}
                                     name="filter_form"
-                                    className="flex w-full max-w-lg"
+                                    className="flex w-full max-w-lg flex-col space-y-2 md:flex-row"
                                 >
                                     <label
                                         htmlFor="periode"
@@ -63,8 +77,12 @@ export default function BookingsPage({ bookingsPaginate }: BookingsProps) {
                                         Periode
                                     </label>
                                     <select
+                                        onChange={(e) =>
+                                            setData("periode", e.target.value)
+                                        }
                                         name="periode"
                                         id="periode"
+                                        defaultValue={formValues.periode}
                                         className="mr-2 block w-full rounded-md border border-neutral-300 bg-neutral-100 text-sm text-neutral-900 placeholder-neutral-500 focus:border-neutral-300 focus:outline-none focus:ring-neutral-200 dark:border-neutral-600 dark:bg-neutral-700 dark:text-neutral-100 dark:placeholder-neutral-400"
                                     >
                                         <option value="today">I dag</option>
@@ -81,19 +99,34 @@ export default function BookingsPage({ bookingsPaginate }: BookingsProps) {
                                         Filter
                                     </label>
                                     <input
-                                        type="text"
-                                        id="filter"
-                                        name="filter"
+                                        onChange={(e) =>
+                                            setData("search", e.target.value)
+                                        }
+                                        value={formValues.search}
+                                        type="search"
+                                        id="search"
+                                        name="search"
                                         placeholder="Søk etter booking"
                                         className="block w-full rounded-md border border-neutral-300 bg-neutral-100 px-4 py-2 text-sm text-neutral-900 placeholder-neutral-500 focus:border-neutral-300 focus:outline-none focus:ring-neutral-200 dark:border-neutral-600 dark:bg-neutral-700 dark:text-neutral-100 dark:placeholder-neutral-400"
                                     />
+                                    <button
+                                        type="submit"
+                                        className="rounded-md border border-transparent bg-blue-500 px-4 py-2 text-sm font-medium text-white hover:bg-blue-600 md:ml-2"
+                                    >
+                                        Søk
+                                    </button>
                                 </form>
                             </div>
                         </div>
-
+                        <hr className="my-4 border-neutral-200 dark:border-neutral-700" />
                         <div className="my-4 flex items-center justify-between">
-                            <h3 className="text-xl dark:text-white">
-                                Kommende bookinger
+                            <h3 className="uppercase tracking-wide dark:text-white">
+                                {periode === "all" && "Alle bookinger"}
+                                {periode === "today" && "Dagens bookinger"}
+                                {periode === "tomorrow" &&
+                                    "Morgendagens bookinger"}
+                                {periode === "week" && "Ukens bookinger"}
+                                {periode === "month" && "Månedens bookinger"}
                             </h3>
                             <Link
                                 href="/dashboard/locations/create"
@@ -114,67 +147,56 @@ export default function BookingsPage({ bookingsPaginate }: BookingsProps) {
                                         d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
                                     />
                                 </svg>
-                                Legg inn booking
+                                <span className="hidden md:block">
+                                    Legg inn booking
+                                </span>
                             </Link>
                         </div>
 
-                        <table className="w-full">
-                            <caption className="sr-only">Bookings</caption>
-                            <thead className="h-12 bg-neutral-100">
-                                <tr className="text-neutral-500 dark:text-neutral-400">
-                                    <th className="p-3 text-left">Sted</th>
-                                    <th className="p-3 text-left">Rom</th>
-                                    <th className="p-3 text-left">Tittel</th>
-                                    <th className="p-3 text-left">Kunde</th>
-                                    <th className="p-3 text-left">Dato</th>
-                                    <th className="p-3 text-left">Fra</th>
-                                    <th className="p-3 text-left">Til</th>
-                                </tr>
-                            </thead>
-                            <tbody className="divide-y-4 divide-neutral-100 dark:divide-neutral-200 dark:text-neutral-100">
+                        <div className="mt-6">
+                            <ul>
                                 {bookings.map((booking) => (
-                                    <tr key={booking.id}>
-                                        <td className="p-3">
-                                            {booking.room.location?.name}
-                                        </td>
-                                        <td className="p-3">
+                                    <li
+                                        key={booking.id}
+                                        className="my-2 w-full items-center rounded bg-neutral-100 p-4 md:flex md:space-x-3 dark:bg-gray-900 dark:text-gray-300"
+                                    >
+                                        <div className="flex min-w-52 space-x-2 px-2 md:mt-0 md:px-0">
+                                            <p>
+                                                {new Date(
+                                                    booking.start,
+                                                ).toLocaleDateString("no-NO", {
+                                                    year: "numeric",
+                                                    month: "numeric",
+                                                    day: "numeric",
+                                                })}
+                                            </p>
+                                            <p>
+                                                {new Date(
+                                                    booking.start,
+                                                ).toLocaleTimeString("no-NO", {
+                                                    hour: "2-digit",
+                                                    minute: "2-digit",
+                                                })}
+                                                -
+                                                {new Date(
+                                                    booking.end,
+                                                ).toLocaleTimeString("no-NO", {
+                                                    hour: "2-digit",
+                                                    minute: "2-digit",
+                                                })}
+                                            </p>
+                                        </div>
+                                        <p className="mt-1 min-w-36 px-2 font-bold md:mt-0 md:px-0">
                                             {booking.room.name}
-                                        </td>
-                                        <td className="p-3">{booking.name}</td>
-                                        <td className="p-3 dark:text-neutral-300">
-                                            {booking.customer?.name ?? (
-                                                <Link
-                                                    className="text-blue-500 hover:text-blue-600"
-                                                    href={`/dashboard/customers/${booking.customer?.id}`}
-                                                >
-                                                    Legg til
-                                                </Link>
-                                            )}
-                                        </td>
-                                        <td className="p-3">
-                                            {new Date(
-                                                booking.start,
-                                            ).toLocaleDateString("no-NO", {
-                                                weekday: "long",
-                                                year: "numeric",
-                                                month: "numeric",
-                                                day: "numeric",
-                                            })}
-                                        </td>
-                                        <td className="p-3">
-                                            {new Date(
-                                                booking.start,
-                                            ).toLocaleTimeString()}
-                                        </td>
-                                        <td className="p-3">
-                                            {new Date(
-                                                booking.end,
-                                            ).toLocaleTimeString()}
-                                        </td>
-                                    </tr>
+                                        </p>
+                                        <h2 className="mt-2 rounded bg-gray-200 p-2 text-sm uppercase tracking-wide md:mt-0 dark:bg-gray-800">
+                                            {booking.name}
+                                        </h2>
+                                    </li>
                                 ))}
-                            </tbody>
-                        </table>
+                            </ul>
+                        </div>
+
                         <div className="mt-12">
                             <nav
                                 className="flex justify-between"
@@ -189,7 +211,7 @@ export default function BookingsPage({ bookingsPaginate }: BookingsProps) {
                                 <div className="flex space-x-2">
                                     {links.prev && (
                                         <Link
-                                            href={links.prev}
+                                            href={`${links.prev}&periode=${formValues.periode}&search=${formValues.search}`}
                                             className="relative inline-flex items-center rounded-md border border-neutral-300 bg-neutral-100 px-4 py-2 text-sm font-medium text-neutral-900 dark:border-neutral-600 dark:bg-neutral-700 dark:text-neutral-100"
                                         >
                                             Forrige
@@ -197,7 +219,7 @@ export default function BookingsPage({ bookingsPaginate }: BookingsProps) {
                                     )}
                                     {links.next && (
                                         <Link
-                                            href={links.next}
+                                            href={`${links.next}&periode=${formValues.periode}&search=${formValues.search}`}
                                             className="relative inline-flex items-center rounded-md border border-neutral-300 bg-neutral-100 px-4 py-2 text-sm font-medium text-neutral-900 dark:border-neutral-600 dark:bg-neutral-700 dark:text-neutral-100"
                                         >
                                             Neste

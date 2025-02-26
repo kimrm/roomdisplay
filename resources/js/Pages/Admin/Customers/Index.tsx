@@ -6,15 +6,10 @@ import { Head, Link } from "@inertiajs/react";
 export default function Index({
     customersPaginate,
 }: PageProps<{ customersPaginate: CustomersPaginate }>) {
-    const { data } = customersPaginate;
+    const { data, links, meta } = customersPaginate;
+
     return (
-        <Authenticated
-            header={
-                <h2 className="text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200">
-                    Kunder
-                </h2>
-            }
-        >
+        <Authenticated>
             <Head title="Kunder" />
             <div className="py-12">
                 <div className="mx-auto max-w-7xl space-y-6 sm:px-6 lg:px-8">
@@ -47,18 +42,16 @@ export default function Index({
                             {data.map((customer, i) => (
                                 <li
                                     key={customer.id}
-                                    className={`${i % 2 === 0 ? "bg-neutral-100" : "bg-neutral-200"} mb-2 space-y-2 rounded-md p-4`}
+                                    className={`mb-2 space-y-2 rounded-md bg-neutral-100 p-4 dark:bg-gray-900`}
                                 >
                                     <div className="flex items-center justify-between">
                                         <div>
-                                            <a
+                                            <Link
                                                 href={`/dashboard/customers/${customer.id}`}
-                                                target="_blank"
-                                                rel="noreferrer"
                                                 className="text-blue-500 hover:text-blue-600"
                                             >
                                                 {customer.name}
-                                            </a>
+                                            </Link>
                                         </div>
                                         <div>
                                             <Link
@@ -72,6 +65,37 @@ export default function Index({
                                 </li>
                             ))}
                         </ul>
+                        <div className="mt-12">
+                            <nav
+                                className="flex justify-between"
+                                aria-label="Pagination"
+                            >
+                                <div>
+                                    <p className="text-sm text-neutral-500 dark:text-neutral-400">
+                                        Viser {meta.from} til {meta.to} av{" "}
+                                        {meta.total} kunder
+                                    </p>
+                                </div>
+                                <div className="flex space-x-2">
+                                    {links.prev && (
+                                        <Link
+                                            href={`${links.prev}`}
+                                            className="relative inline-flex items-center rounded-md border border-neutral-300 bg-neutral-100 px-4 py-2 text-sm font-medium text-neutral-900 dark:border-neutral-600 dark:bg-neutral-700 dark:text-neutral-100"
+                                        >
+                                            Forrige
+                                        </Link>
+                                    )}
+                                    {links.next && (
+                                        <Link
+                                            href={`${links.next}`}
+                                            className="relative inline-flex items-center rounded-md border border-neutral-300 bg-neutral-100 px-4 py-2 text-sm font-medium text-neutral-900 dark:border-neutral-600 dark:bg-neutral-700 dark:text-neutral-100"
+                                        >
+                                            Neste
+                                        </Link>
+                                    )}
+                                </div>
+                            </nav>
+                        </div>
                     </div>
                 </div>
             </div>
