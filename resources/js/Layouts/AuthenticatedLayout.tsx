@@ -1,4 +1,3 @@
-import ApplicationLogo from "@/Components/ApplicationLogo";
 import Dropdown from "@/Components/Dropdown";
 import NavLink from "@/Components/NavLink";
 import ResponsiveNavLink from "@/Components/ResponsiveNavLink";
@@ -50,6 +49,12 @@ export default function Authenticated({
                                     active={route().current("bookings.*")}
                                 >
                                     Rombookinger
+                                </NavLink>
+                                <NavLink
+                                    href={route("customers.index")}
+                                    active={route().current("customers.*")}
+                                >
+                                    Kunder
                                 </NavLink>
                             </div>
                         </div>

@@ -16,6 +16,24 @@ export interface LocationData {
     };
 }
 
+export interface CustomersPaginate {
+    data: Customer[];
+    meta: {
+        total: number;
+        per_page: number;
+        current_page: number;
+        last_page: number;
+        from: number;
+        to: number;
+    };
+    links: {
+        first: string;
+        last: string;
+        next: string;
+        prev: string;
+    };
+}
+
 export interface Location {
     id: string;
     slug: string;
@@ -44,6 +62,24 @@ export interface Booking {
     start: date;
     end: date;
     room: Room;
+    customer?: Customer;
+}
+
+export interface Customer {
+    id: string;
+    name: string;
+    email?: string;
+    phone?: string;
+    address?: string;
+    city?: string;
+    postalCode?: string;
+    contactName?: string;
+    orgNr?: string;
+    notes?: string;
+}
+
+export interface CustomerResponse {
+    data: Customer;
 }
 
 export type PageProps<

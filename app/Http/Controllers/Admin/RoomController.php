@@ -15,8 +15,19 @@ class RoomController extends Controller
      */
     public function index()
     {
+
+        $selectedLocationId = request('location');
+        if ($selectedLocationId) {
+            return inertia('Admin/Rooms/Index', [
+                'rooms' => Room::with('location')->where('location_id', $selectedLocationId)->get(),
+                'locations' => Location::all(),
+                'selectedLocationId' => $selectedLocationId
+            ]);
+        }
+
         return inertia('Admin/Rooms/Index', [
-            'rooms' => Room::with('location')->get()
+            'rooms' => Room::with('location')->get(),
+            'locations' => Location::all()
         ]);
     }
 

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Booking;
 use Illuminate\Http\Request;
+use App\Http\Resources\BookingResource;
 
 class BookingController extends Controller
 {
@@ -13,8 +14,31 @@ class BookingController extends Controller
      */
     public function index()
     {
+        $search  = request()->get('search');
+        $periode = $search ? 'all' : request()->get('periode') ?? 'today';
+
+
+        if ($periode == 'all' || $periode == null) {
+            $bookings = Booking::with('room')
+                ->with('room.location')
+                ->with('customer')
+                ->orderBy('created_at', 'desc');
+        } else {
+            $bookings = Booking::with('room')
+                ->with('room.location')
+                ->with('customer')
+                ->periode($periode)
+                ->orderBy('start', 'asc');
+        }
+
+        $bookings = $bookings
+            ->search($search)
+            ->paginate();
+
         return inertia('Admin/Bookings/Index', [
-            'bookingsPaginate' => Booking::paginate(),
+            'bookingsPaginate' => BookingResource::collection($bookings),
+            'periode' => $periode,
+            'search' => $search,
         ]);
     }
 

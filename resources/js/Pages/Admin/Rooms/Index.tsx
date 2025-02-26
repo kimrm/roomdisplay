@@ -1,12 +1,18 @@
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head, Link } from "@inertiajs/react";
-import { Room } from "@/types";
+import { Room, Location } from "@/types";
 
 interface RoomProps {
     rooms: Room[];
+    locations: Location[];
+    selectedLocationId: string;
 }
 
-export default function RoomsPage({ rooms }: RoomProps) {
+export default function RoomsPage({
+    rooms,
+    locations,
+    selectedLocationId,
+}: RoomProps) {
     return (
         <AuthenticatedLayout
             header={
@@ -46,12 +52,40 @@ export default function RoomsPage({ rooms }: RoomProps) {
                                 Nytt rom
                             </Link>
                         </div>
+                        <form
+                            action=""
+                            method="GET"
+                            className="mb-4 inline-block"
+                        >
+                            <select
+                                name="location"
+                                id="location"
+                                className="block w-full rounded-md border border-gray-300 p-2 dark:bg-gray-700 dark:text-white"
+                            >
+                                <option value="">Alle</option>
+                                {locations.map((location) => {
+                                    return (
+                                        <option
+                                            key={location.id}
+                                            value={location.id}
+                                            selected={
+                                                selectedLocationId ==
+                                                location.id
+                                            }
+                                        >
+                                            {location.name}
+                                        </option>
+                                    );
+                                })}
+                            </select>
+                            <button>Filtrer</button>
+                        </form>
                         <ul className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
                             {rooms.map((room) => {
                                 return (
                                     <li
                                         key={room.id}
-                                        className="relative rounded-md bg-neutral-50 p-4 hover:bg-neutral-100"
+                                        className="relative rounded-md bg-neutral-50 p-4 hover:bg-gray-950 hover:bg-neutral-100 dark:bg-gray-900 dark:text-white"
                                     >
                                         <div className="absolute right-0 top-0 p-2">
                                             <Link
