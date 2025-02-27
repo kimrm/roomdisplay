@@ -13,5 +13,11 @@ class Customer extends Model
         'name',
         'email',
         'phone',
+        'address',
+        'city',
+        'postal_code',
+        'contact_name',
+        'org_nr',
+        'notes',
     ];
 }

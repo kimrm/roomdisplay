@@ -17,7 +17,7 @@ export default function Index({
                         <div className="mb-4 flex items-center justify-between">
                             <h3 className="text-xl dark:text-white">Kunder</h3>
                             <Link
-                                href="/dashboard/locations/create"
+                                href={route("customers.create")}
                                 className="flex items-center justify-center rounded-md border border-transparent px-4 py-2 hover:border-neutral-200 dark:bg-gray-800 dark:text-white"
                             >
                                 <svg

@@ -85,7 +85,7 @@ export default function RoomsPage({
                                 return (
                                     <li
                                         key={room.id}
-                                        className="relative rounded-md bg-neutral-50 p-4 hover:bg-gray-950 hover:bg-neutral-100 dark:bg-gray-900 dark:text-white"
+                                        className="relative rounded-md bg-neutral-50 p-4 hover:bg-neutral-100 dark:bg-gray-900 dark:text-white dark:hover:bg-gray-950"
                                     >
                                         <div className="absolute right-0 top-0 p-2">
                                             <Link

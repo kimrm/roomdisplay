@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\Customer;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\CustomerResource;
+use App\Http\Requests\CustomerRequest;
 
 class CustomerController extends Controller
 {
@@ -24,15 +24,17 @@ class CustomerController extends Controller
      */
     public function create()
     {
-        //
+        return inertia('Admin/Customers/Create');
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(CustomerRequest $request)
     {
-        //
+        $customer = Customer::create($request->validated());
+
+        return redirect()->route('customers.show', $customer);
     }
 
     /**
@@ -51,16 +53,18 @@ class CustomerController extends Controller
     public function edit(Customer $customer)
     {
         return inertia('Admin/Customers/Edit', [
-            'customer' => new CustomerResource($customer),
+            'customerResponse' => new CustomerResource($customer),
         ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Customer $customer)
+    public function update(CustomerRequest $request, Customer $customer)
     {
-        //
+        $customer->update($request->validated());
+
+        return redirect()->route('customers.show', $customer);
     }
 
     /**
@@ -68,6 +72,8 @@ class CustomerController extends Controller
      */
     public function destroy(Customer $customer)
     {
-        //
+        $customer->delete();
+
+        return redirect()->route('customers.index');
     }
 }
