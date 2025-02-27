@@ -59,9 +59,10 @@ class Booking extends Model
                     $end = Carbon::now()->endOfMonth();
                     break;
                 default:
-                    throw new \InvalidArgumentException("Start date is not valid");
+                    throw new \InvalidArgumentException('Start date is not valid');
             }
         }
+
         return $query->where('start', '>=', $start)
             ->where('end', '<=', $end);
     }

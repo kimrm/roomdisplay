@@ -17,7 +17,7 @@ class Room extends Model
         'description',
         'display_message',
         'calendar_id',
-        'service'
+        'service',
     ];
 
     public static function generateUniqueSlug($name, $locationId)

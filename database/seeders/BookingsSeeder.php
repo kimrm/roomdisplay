@@ -2,10 +2,9 @@
 
 namespace Database\Seeders;
 
+use App\Models\Booking;
 use App\Models\Location;
 use App\Models\Room;
-use App\Models\Booking;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class BookingsSeeder extends Seeder

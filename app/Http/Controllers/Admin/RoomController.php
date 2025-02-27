@@ -3,10 +3,10 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\RoomResource;
 use App\Models\Location;
 use App\Models\Room;
 use Illuminate\Http\Request;
-use App\Http\Resources\RoomResource;
 
 class RoomController extends Controller
 {
@@ -21,13 +21,13 @@ class RoomController extends Controller
             return inertia('Admin/Rooms/Index', [
                 'rooms' => Room::with('location')->where('location_id', $selectedLocationId)->get(),
                 'locations' => Location::all(),
-                'selectedLocationId' => $selectedLocationId
+                'selectedLocationId' => $selectedLocationId,
             ]);
         }
 
         return inertia('Admin/Rooms/Index', [
             'rooms' => Room::with('location')->get(),
-            'locations' => Location::all()
+            'locations' => Location::all(),
         ]);
     }
 
@@ -37,7 +37,7 @@ class RoomController extends Controller
     public function create()
     {
         return inertia('Admin/Rooms/Create', [
-            'locations' => Location::all()
+            'locations' => Location::all(),
         ]);
     }
 
@@ -53,7 +53,7 @@ class RoomController extends Controller
             'description' => 'nullable|string',
             'display_message' => 'nullable|string',
             'calendar_id' => 'nullable|string',
-            'sync' => 'nullable|string'
+            'sync' => 'nullable|string',
         ]);
 
         Room::create([
@@ -63,7 +63,7 @@ class RoomController extends Controller
             'description' => $request->description,
             'display_message' => $request->display_message,
             'calendar_id' => $request->calendar_id,
-            'service' => $request->sync
+            'service' => $request->sync,
         ]);
 
         return redirect()->route('rooms.index');
@@ -86,7 +86,7 @@ class RoomController extends Controller
 
         return inertia('Admin/Rooms/Edit', [
             'roomResponse' => new RoomResource($room),
-            'locations' => Location::all()
+            'locations' => Location::all(),
         ]);
     }
 
@@ -101,7 +101,7 @@ class RoomController extends Controller
             'description' => 'nullable|string',
             'display_message' => 'nullable|string',
             'calendar_id' => 'nullable|string',
-            'sync' => 'nullable|string'
+            'sync' => 'nullable|string',
         ]);
 
         $room->update($attributes);

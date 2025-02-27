@@ -3,10 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Location;
-use Illuminate\Http\Request;
 use App\Http\Requests\LocationRequest;
 use App\Http\Resources\LocationResource;
+use App\Models\Location;
 
 class LocationController extends Controller
 {
@@ -16,7 +15,7 @@ class LocationController extends Controller
     public function index()
     {
         return inertia('Admin/Locations/Index', [
-            'locations' => Location::all()
+            'locations' => Location::all(),
         ]);
     }
 
@@ -55,7 +54,7 @@ class LocationController extends Controller
     public function edit(Location $location)
     {
         return inertia('Admin/Locations/Edit', [
-            'location' => new LocationResource($location)
+            'location' => new LocationResource($location),
         ]);
     }
 

@@ -1,11 +1,11 @@
 <?php
 
+use App\Http\Controllers\Admin\BookingController;
+use App\Http\Controllers\Admin\CustomerController;
+use App\Http\Controllers\Admin\LocationController;
+use App\Http\Controllers\Admin\RoomController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
-use App\Http\Controllers\Admin\LocationController;
-use App\Http\Controllers\Admin\BookingController;
-use App\Http\Controllers\Admin\RoomController;
-use App\Http\Controllers\Admin\CustomerController;
 
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');

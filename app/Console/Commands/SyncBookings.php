@@ -2,8 +2,8 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
 use App\Google\Sync;
+use Illuminate\Console\Command;
 
 class SyncBookings extends Command
 {

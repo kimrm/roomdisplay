@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Models\Customer;
 use App\Http\Controllers\Controller;
-use App\Http\Resources\CustomerResource;
 use App\Http\Requests\CustomerRequest;
+use App\Http\Resources\CustomerResource;
+use App\Models\Customer;
 
 class CustomerController extends Controller
 {

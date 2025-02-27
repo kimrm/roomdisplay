@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Models\Location;
 use App\Http\Resources\LocationResource;
+use App\Models\Location;
 
 class LocationDayOverviewController extends Controller
 {
@@ -15,7 +15,7 @@ class LocationDayOverviewController extends Controller
     {
         $location = Location::find($id);
 
-        if (!$location) {
+        if (! $location) {
             return response()->json(['message' => 'Location not found'], 404);
         }
 

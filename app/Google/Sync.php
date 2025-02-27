@@ -2,14 +2,13 @@
 
 namespace App\Google;
 
-use Spatie\GoogleCalendar\Event;
-use Carbon\Carbon;
-use App\Models\Room;
 use App\Models\Booking;
+use App\Models\Room;
+use Carbon\Carbon;
+use Spatie\GoogleCalendar\Event;
 
 class Sync
 {
-
     public static function handle()
     {
         self::googleSync();
@@ -18,9 +17,8 @@ class Sync
     public static function googleSync()
     {
 
-        $dt1 =  Carbon::now()->add(-1, 'month');
-        $dt2 =  Carbon::now()->add(1, 'month');
-
+        $dt1 = Carbon::now()->add(-1, 'month');
+        $dt2 = Carbon::now()->add(1, 'month');
 
         $f_yr = $dt1->year;
         $f_md = $dt1->month;
@@ -40,7 +38,7 @@ class Sync
         $rooms = Room::all();
         foreach ($rooms as $room) {
             $id = $room->calendar_id;
-            if (!$id) {
+            if (! $id) {
                 continue;
             }
             $ext_events = self::getEvents($dt_start, $dt_end, $id);
@@ -78,7 +76,7 @@ class Sync
                     break;
                 }
             }
-            if (!$found) {
+            if (! $found) {
                 $booking->delete();
             }
         }
@@ -100,7 +98,7 @@ class Sync
             $dt_start = new \DateTime($event->start->dateTime);
             $dt_end = new \DateTime($event->end->dateTime);
 
-            $eventarr = array(
+            $eventarr = [
                 'id' => $event->id,
                 'room' => $event->organizer->displayName,
                 'where' => $event->location,
@@ -108,8 +106,8 @@ class Sync
                 'from' => $dt_start->format('H:i'),
                 'fromDate' => $dt_start,
                 'to' => $dt_end->format('H:i'),
-                'toDate' => $dt_end
-            );
+                'toDate' => $dt_end,
+            ];
 
             $events_array[] = $eventarr;
         }
