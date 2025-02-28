@@ -62,7 +62,9 @@ class BookingController extends Controller
      */
     public function show(Booking $booking)
     {
-        //
+        return inertia('Admin/Bookings/Show', [
+            'booking' => new BookingResource($booking),
+        ]);
     }
 
     /**
