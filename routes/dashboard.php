@@ -34,6 +34,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::get('/create', [BookingController::class, 'create'])->name('bookings.create');
             Route::post('/', [BookingController::class, 'store'])->name('bookings.store');
             Route::get('/{booking}/edit', [BookingController::class, 'edit'])->name('bookings.edit');
+            Route::get('/{booking}', [BookingController::class, 'show'])->name('bookings.show');
             Route::patch('/{booking}', [BookingController::class, 'update'])->name('bookings.update');
             Route::delete('/{booking}', [BookingController::class, 'destroy'])->name('bookings.destroy');
         });
