@@ -3,7 +3,7 @@ import { Head, Link, useForm } from "@inertiajs/react";
 import { PageProps } from "@/types";
 import { CustomerResponse } from "@/types";
 
-export default function Show({
+export default function Edit({
     customerResponse,
 }: PageProps<{ customerResponse: CustomerResponse }>) {
     const { data: customer } = customerResponse;
@@ -43,7 +43,7 @@ export default function Show({
                                         }
                                         type="text"
                                         name="name"
-                                        className="rounded border border-gray-200 text-xl dark:text-white"
+                                        className="rounded border border-gray-200 text-xl text-gray-800"
                                         defaultValue={customer.name}
                                     />
                                 </h3>
@@ -87,7 +87,7 @@ export default function Show({
                                                 }
                                                 type="email"
                                                 name="email"
-                                                className="w-full rounded border border-gray-200 dark:text-white"
+                                                className="w-full rounded border border-gray-200 text-xl text-gray-800"
                                                 defaultValue={customer.email}
                                             />
                                         </div>
@@ -104,7 +104,7 @@ export default function Show({
                                                 }
                                                 type="text"
                                                 name="phone"
-                                                className="w-full rounded border border-gray-200 dark:text-white"
+                                                className="w-full rounded border border-gray-200 text-xl text-gray-800"
                                                 defaultValue={customer.phone}
                                             />
                                         </div>
@@ -121,7 +121,7 @@ export default function Show({
                                                 }
                                                 type="text"
                                                 name="address"
-                                                className="w-full rounded border border-gray-200 dark:text-white"
+                                                className="w-full rounded border border-gray-200 text-xl text-gray-800"
                                                 defaultValue={customer.address}
                                             />
                                         </div>
@@ -138,7 +138,7 @@ export default function Show({
                                                 }
                                                 type="text"
                                                 name="city"
-                                                className="w-full rounded border border-gray-200 dark:text-white"
+                                                className="w-full rounded border border-gray-200 text-xl text-gray-800"
                                                 defaultValue={customer.city}
                                             />
                                         </div>
@@ -155,7 +155,7 @@ export default function Show({
                                                 }
                                                 type="text"
                                                 name="postalCode"
-                                                className="w-full rounded border border-gray-200 dark:text-white"
+                                                className="w-full rounded border border-gray-200 text-xl text-gray-800"
                                                 defaultValue={
                                                     customer.postalCode
                                                 }
@@ -174,7 +174,7 @@ export default function Show({
                                                 }
                                                 type="text"
                                                 name="contactName"
-                                                className="w-full rounded border border-gray-200 dark:text-white"
+                                                className="w-full rounded border border-gray-200 text-xl text-gray-800"
                                                 defaultValue={
                                                     customer.contactName
                                                 }
@@ -193,7 +193,7 @@ export default function Show({
                                                 }
                                                 type="text"
                                                 name="orgNr"
-                                                className="w-full rounded border border-gray-200 dark:text-white"
+                                                className="w-full rounded border border-gray-200 text-xl text-gray-800"
                                                 defaultValue={customer.orgNr}
                                             />
                                         </div>
@@ -209,7 +209,7 @@ export default function Show({
                                                 setData("notes", e.target.value)
                                             }
                                             name="notes"
-                                            className="w-full rounded border border-gray-200 dark:text-white"
+                                            className="w-full rounded border border-gray-200 text-xl text-gray-800"
                                             defaultValue={customer.notes}
                                         />
                                     </div>
