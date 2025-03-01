@@ -1,11 +1,11 @@
 <?php
 
+use App\Http\Controllers\Admin\BookingController;
+use App\Http\Controllers\Admin\CustomerController;
+use App\Http\Controllers\Admin\LocationController;
+use App\Http\Controllers\Admin\RoomController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
-use App\Http\Controllers\Admin\LocationController;
-use App\Http\Controllers\Admin\BookingController;
-use App\Http\Controllers\Admin\RoomController;
-use App\Http\Controllers\Admin\CustomerController;
 
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
@@ -34,6 +34,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::get('/create', [BookingController::class, 'create'])->name('bookings.create');
             Route::post('/', [BookingController::class, 'store'])->name('bookings.store');
             Route::get('/{booking}/edit', [BookingController::class, 'edit'])->name('bookings.edit');
+            Route::get('/{booking}', [BookingController::class, 'show'])->name('bookings.show');
             Route::patch('/{booking}', [BookingController::class, 'update'])->name('bookings.update');
             Route::delete('/{booking}', [BookingController::class, 'destroy'])->name('bookings.destroy');
         });

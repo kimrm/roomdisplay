@@ -16,7 +16,7 @@ class Location extends Model
         'name',
         'description',
         'display_message',
-        'slug'
+        'slug',
     ];
 
     public function rooms(): HasMany

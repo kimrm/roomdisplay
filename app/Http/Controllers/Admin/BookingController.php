@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\BookingResource;
 use App\Models\Booking;
 use Illuminate\Http\Request;
-use App\Http\Resources\BookingResource;
 
 class BookingController extends Controller
 {
@@ -14,9 +14,8 @@ class BookingController extends Controller
      */
     public function index()
     {
-        $search  = request()->get('search');
+        $search = request()->get('search');
         $periode = $search ? 'all' : request()->get('periode') ?? 'today';
-
 
         if ($periode == 'all' || $periode == null) {
             $bookings = Booking::with('room')
@@ -63,7 +62,9 @@ class BookingController extends Controller
      */
     public function show(Booking $booking)
     {
-        //
+        return inertia('Admin/Bookings/Show', [
+            'booking' => new BookingResource($booking),
+        ]);
     }
 
     /**

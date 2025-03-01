@@ -9,7 +9,7 @@ test('single location api endpoint returns 200', function () {
         'slug' => 'location-test',
     ]);
 
-    $response = $this->get('/api/locations/' . $location->id);
+    $response = $this->get('/api/locations/'.$location->id);
 
     $response->assertStatus(200)->assertJson([
         'id' => $location->id,

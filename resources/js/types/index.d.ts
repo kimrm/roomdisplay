@@ -62,6 +62,7 @@ export interface Booking {
     start: date;
     end: date;
     room: Room;
+    sync_identifier?: string;
     customer?: Customer;
 }
 

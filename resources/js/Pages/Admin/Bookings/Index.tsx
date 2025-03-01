@@ -158,40 +158,72 @@ export default function BookingsPage({
                                 {bookings.map((booking) => (
                                     <li
                                         key={booking.id}
-                                        className="my-2 w-full items-center rounded bg-neutral-100 p-4 md:flex md:space-x-3 dark:bg-gray-900 dark:text-gray-300"
+                                        className="my-2 w-full items-center justify-between rounded bg-neutral-100 p-4 md:flex md:space-x-3 dark:bg-gray-900 dark:text-gray-300"
                                     >
-                                        <div className="flex min-w-52 space-x-2 px-2 md:mt-0 md:px-0">
-                                            <p>
-                                                {new Date(
-                                                    booking.start,
-                                                ).toLocaleDateString("no-NO", {
-                                                    year: "numeric",
-                                                    month: "numeric",
-                                                    day: "numeric",
-                                                })}
+                                        <div className="flex w-full items-center">
+                                            <div className="flex min-w-52 flex-row space-x-2 px-2 md:mt-0 md:px-0">
+                                                <p>
+                                                    {new Date(
+                                                        booking.start,
+                                                    ).toLocaleDateString(
+                                                        "no-NO",
+                                                        {
+                                                            year: "numeric",
+                                                            month: "numeric",
+                                                            day: "numeric",
+                                                        },
+                                                    )}
+                                                </p>
+                                                <p>
+                                                    {new Date(
+                                                        booking.start,
+                                                    ).toLocaleTimeString(
+                                                        "no-NO",
+                                                        {
+                                                            hour: "2-digit",
+                                                            minute: "2-digit",
+                                                        },
+                                                    )}
+                                                    -
+                                                    {new Date(
+                                                        booking.end,
+                                                    ).toLocaleTimeString(
+                                                        "no-NO",
+                                                        {
+                                                            hour: "2-digit",
+                                                            minute: "2-digit",
+                                                        },
+                                                    )}
+                                                </p>
+                                            </div>
+                                            <p className="mt-1 min-w-36 px-2 font-bold md:mt-0 md:px-0">
+                                                {booking.room.name}
                                             </p>
-                                            <p>
-                                                {new Date(
-                                                    booking.start,
-                                                ).toLocaleTimeString("no-NO", {
-                                                    hour: "2-digit",
-                                                    minute: "2-digit",
-                                                })}
-                                                -
-                                                {new Date(
-                                                    booking.end,
-                                                ).toLocaleTimeString("no-NO", {
-                                                    hour: "2-digit",
-                                                    minute: "2-digit",
-                                                })}
-                                            </p>
+                                            <h2 className="mt-2 rounded bg-gray-200 p-2 text-sm uppercase tracking-wide md:mt-0 dark:bg-gray-800">
+                                                {booking.name}
+                                            </h2>
+                                            {booking.customer && (
+                                                <Link
+                                                    href={route(
+                                                        "customers.show",
+                                                        booking.customer?.id,
+                                                    )}
+                                                    className="mt-2 px-2 md:mt-0 md:px-0"
+                                                >
+                                                    {`#${booking.id}`}{" "}
+                                                    {booking.customer.name}
+                                                </Link>
+                                            )}
                                         </div>
-                                        <p className="mt-1 min-w-36 px-2 font-bold md:mt-0 md:px-0">
-                                            {booking.room.name}
-                                        </p>
-                                        <h2 className="mt-2 rounded bg-gray-200 p-2 text-sm uppercase tracking-wide md:mt-0 dark:bg-gray-800">
-                                            {booking.name}
-                                        </h2>
+                                        <div>
+                                            <Link
+                                                href={`/dashboard/bookings/${booking.id}`}
+                                            >
+                                                <a className="mt-2 px-2 md:mt-0 md:px-0">
+                                                    Rediger
+                                                </a>
+                                            </Link>
+                                        </div>
                                     </li>
                                 ))}
                             </ul>
